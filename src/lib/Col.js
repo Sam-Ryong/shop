@@ -3,10 +3,15 @@
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
+import { useNavigate } from "react-router-dom";
 
 function Box(props) {
   return (
-    <Col>
+    <Col
+      onClick={() => {
+        props.navigate(`/detail/${props.id}`);
+      }}
+    >
       <img src={props.imgsrc} height="200px" />
       <h4>{props.title}</h4>
       <p>{props.content}</p>
@@ -16,16 +21,19 @@ function Box(props) {
 }
 
 function Imagebox(props) {
+  let navigate = useNavigate();
   return (
     <Container>
       <Row>
         {props.data.map((dt, i) => {
           return (
             <Box
+              id={dt.id}
               imgsrc={dt.url}
               title={dt.title}
               content={dt.content}
               exp={dt.exp}
+              navigate={navigate}
             />
           );
         })}

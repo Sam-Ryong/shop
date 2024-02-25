@@ -4,7 +4,7 @@ let data = [
     title: "차벌",
     content: "화팽",
     exp: 220,
-    url: "https://maplestory.io/api/gms/62/mob/animated/5140000/move",
+    url: "https://maplestory.io/api/gms/62/mob/animated/5130104/move",
   },
   {
     id: 1,
