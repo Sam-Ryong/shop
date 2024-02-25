@@ -2,16 +2,32 @@
 
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.min.css";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Navbar from "./lib/nav.js";
 import bg from "./img/bg.png";
 import Imagebox from "./lib/Col.js";
 import data from "./lib/data.js";
 import Detail from "./routes/Detail.js";
-import { Routes, Route, Link } from "react-router-dom";
+import { Routes, Route } from "react-router-dom";
+import axios from "axios";
 
 function App() {
-  let [map] = useState(data);
+  let [map, setMap] = useState(data);
+  let [more, setMore] = useState(1);
+  useEffect(() => {
+    axios
+      .get("http://localhost:3000/data.json")
+      .then((data) => {
+        let copy = map;
+        data.data.map((d) => {
+          copy.push(d);
+        });
+        setMap(copy);
+      })
+      .catch(() => {
+        console.log("ajax 요청 실패");
+      });
+  }, [more]);
   return (
     <div className="App">
       <Navbar className="dark"></Navbar>
@@ -25,7 +41,13 @@ function App() {
                 style={{ backgroundImage: `url(${bg})` }}
               ></div>
               <Imagebox data={map}></Imagebox>
-              <Link to="/detail">상세페이지</Link>
+              <button
+                onClick={() => {
+                  setMore(more + 1);
+                }}
+              >
+                버튼
+              </button>
             </>
           }
         />
