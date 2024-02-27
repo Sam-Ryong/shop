@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
+import Tabs from "../lib/Tab.js";
 //styled-component 장점 : 다른 js 파일에 간섭 안함
 //간섭 방지용으로 .css 파일을 App.module.css 로 저장하면 됨
 // 또 장점은 로딩시간이 단축됨 전체 css를 다운로드 하지 않기 때문에
@@ -25,6 +26,8 @@ function Detail(props) {
   let [alert, setAlert] = useState(false);
   let { id } = useParams();
   let [msg, setMsg] = useState("");
+  let [data, setData] = useState(props.data);
+  let [fade, setFade] = useState("");
   let key;
   useEffect(() => {
     // 컴포넌트 mount, update시 실행될 코드
@@ -42,6 +45,7 @@ function Detail(props) {
   // 물론 mount 될 때에는 무조건 한번 실행되긴 함
   // [] 안에 아무것도 넣지 않으면 어떠한 것이 update 되어도 실행되지 않음
   // mount 할때만 실행하고 싶으면 아무것도 안넣으면 됨
+
   useEffect(() => {
     if (isNaN(msg)) {
       setAlert(true);
@@ -49,48 +53,55 @@ function Detail(props) {
       setAlert(false);
     }
   }, [msg]);
-
-  for (let i = 0; i < props.data.length; i++) {
-    if (props.data[i].id == id) {
+  useEffect(() => {
+    setTimeout(() => {
+      setFade("end");
+    }, 100);
+  }, []);
+  for (let i = 0; i < data.length; i++) {
+    if (data[i].id == id) {
       key = i;
     }
   }
   return (
-    <div className="container">
-      <YellowBtn
-        bg="blue"
-        onClick={() => {
-          setCount(count + 1);
-        }}
-      >
-        버튼
-      </YellowBtn>
-      {toggle ? (
-        <div className="alert alert-warning">2초이내 구매시 할인</div>
-      ) : null}
-      <div className="row">
-        <div className="col-md-6">
-          <img src={props.data[key].url} height="200px" />
+    <div className={`start ${fade}`}>
+      <div className="container">
+        <YellowBtn
+          bg="blue"
+          onClick={() => {
+            setCount(count + 1);
+          }}
+        >
+          버튼
+        </YellowBtn>
+        {toggle ? (
+          <div className="alert alert-warning">2초이내 구매시 할인</div>
+        ) : null}
+        <div className="row">
+          <div className="col-md-6">
+            <img src={data[key].url} height="200px" />
+          </div>
+          <div className="col-md-6">
+            <h4 className="pt-5">{data[key].title}</h4>
+            <p>{data[key].content}</p>
+            <p>{data[key].exp}</p>
+            {alert ? <div className="alert alert-warning">숫자만</div> : null}
+            <InputGroup className="mb-3">
+              <InputGroup.Text id="inputGroup-sizing-default">
+                말걸기
+              </InputGroup.Text>
+              <Form.Control
+                aria-label="Default"
+                aria-describedby="inputGroup-sizing-default"
+                onChange={(e) => {
+                  setMsg(e.target.value);
+                }}
+              />
+            </InputGroup>
+            <button className="btn btn-danger">주문하기</button>
+          </div>
         </div>
-        <div className="col-md-6">
-          <h4 className="pt-5">{props.data[key].title}</h4>
-          <p>{props.data[key].content}</p>
-          <p>{props.data[key].exp}</p>
-          {alert ? <div className="alert alert-warning">숫자만</div> : null}
-          <InputGroup className="mb-3">
-            <InputGroup.Text id="inputGroup-sizing-default">
-              말걸기
-            </InputGroup.Text>
-            <Form.Control
-              aria-label="Default"
-              aria-describedby="inputGroup-sizing-default"
-              onChange={(e) => {
-                setMsg(e.target.value);
-              }}
-            />
-          </InputGroup>
-          <button className="btn btn-danger">주문하기</button>
-        </div>
+        <Tabs data={data[key]} />
       </div>
     </div>
   );

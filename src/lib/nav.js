@@ -35,6 +35,13 @@ function ColorSchemesExample() {
             </Nav.Link>
             <Nav.Link
               onClick={() => {
+                navigate("/cart");
+              }}
+            >
+              장바구니
+            </Nav.Link>
+            <Nav.Link
+              onClick={() => {
                 navigate(-1);
               }}
             >
