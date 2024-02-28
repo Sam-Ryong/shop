@@ -5,6 +5,8 @@ import { useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Tabs from "../lib/Tab.js";
+import { useDispatch, useSelector } from "react-redux";
+import { addLevel, addCart } from "../store/member.js";
 //styled-component 장점 : 다른 js 파일에 간섭 안함
 //간섭 방지용으로 .css 파일을 App.module.css 로 저장하면 됨
 // 또 장점은 로딩시간이 단축됨 전체 css를 다운로드 하지 않기 때문에
@@ -29,6 +31,10 @@ function Detail(props) {
   let [data, setData] = useState(props.data);
   let [fade, setFade] = useState("");
   let key;
+  let member = useSelector((state) => {
+    return state.member; //member 만 state로 가져옴
+  });
+  let dispatch = useDispatch();
   useEffect(() => {
     // 컴포넌트 mount, update시 실행될 코드
     // useEffect는 html이 랜더링이 다 되고 실행됨. 그래서 동작을 효율적으로 할 수 잇음
@@ -99,6 +105,14 @@ function Detail(props) {
               />
             </InputGroup>
             <button className="btn btn-danger">주문하기</button>
+            <button
+              className="btn btn-danger"
+              onClick={() => {
+                dispatch(addCart(data[key]));
+              }}
+            >
+              장바구니
+            </button>
           </div>
         </div>
         <Tabs data={data[key]} />

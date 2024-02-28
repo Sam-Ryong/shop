@@ -6,13 +6,13 @@ function Cart() {
   let user = useSelector((state) => {
     return state.user;
   }); // redux의 모든 state가 남음
-  let dispatch = useDispatch();
+  let dispatch = useDispatch(); //리덕스에 정의된 함수를 사용하기 위해
 
   return (
     <div>
       <button
         onClick={() => {
-          dispatch(setUser());
+          dispatch(setUser(1)); //setUser 함수를 사용
         }}
       >
         변경
