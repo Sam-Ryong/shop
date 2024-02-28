@@ -25,7 +25,7 @@ function Imagebox(props) {
   return (
     <Container>
       <Row>
-        {props.data.map((dt, i) => {
+        {props.data.map((dt) => {
           return (
             <Box
               id={dt.id}

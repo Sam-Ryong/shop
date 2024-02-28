@@ -1,7 +1,7 @@
 /* eslint-disable */
 import { useParams } from "react-router-dom"; // url의 파라미터를 사용하기위한 라이브러리
 import styled from "styled-components";
-import { useEffect, useState } from "react";
+import { memo, useEffect, useState } from "react";
 import Form from "react-bootstrap/Form";
 import InputGroup from "react-bootstrap/InputGroup";
 import Tabs from "../lib/Tab.js";
@@ -22,7 +22,8 @@ let YellowBtn = styled.button`
 제거 (unmount)
 */
 
-function Detail(props) {
+//memo는 props가 변할때만 랜더링되도록 함
+let Detail = memo(function (props) {
   let [count, setCount] = useState(0);
   let [toggle, setToggle] = useState(true);
   let [alert, setAlert] = useState(false);
@@ -69,6 +70,22 @@ function Detail(props) {
       key = i;
     }
   }
+  useEffect(() => {
+    let trigger = true;
+    let copy = JSON.parse(localStorage.getItem("watched"));
+    for (let j = 0; j < copy.length; j++) {
+      if (copy[j] == key) {
+        trigger = false;
+      }
+    }
+    console.log(trigger);
+    if (trigger) {
+      copy.push(key);
+      localStorage.removeItem("watched");
+      localStorage.setItem("watched", JSON.stringify(copy));
+    }
+  }, []);
+
   return (
     <div className={`start ${fade}`}>
       <div className="container">
@@ -119,6 +136,6 @@ function Detail(props) {
       </div>
     </div>
   );
-}
+});
 
 export default Detail;
